@@ -118,10 +118,20 @@ jobs:
         [ ! -d feeds/luci/applications ]&&echo "没有找到 feeds/luci/applications 路径!"&&exit 127
         echo "克隆 luci-app-passwall-plus 中..."
         git clone https://github.com/yiguihai/luci-app-passwall-plus feeds/luci/applications/luci-app-passwall-plus
+        git clone https://github.com/kenzok8/openwrt-packages feeds/luci/applications/openwrt-packages
+        git clone https://github.com/kenzok8/small feeds/luci/applications/small
         echo "进入 luci-app-passwall-plus 软件包目录..."
         cd feeds/luci/applications/luci-app-passwall-plus
         echo "更新 luci-app-passwall-plus 的子模块..."
         git submodule update --init --recursive
+        
+        cd feeds/luci/applications/openwrt-packages
+        git submodule update --init --recursive
+        
+        cd feeds/luci/applications/small
+        git submodule update --init --recursive
+        
+        
         echo "编译 po2lmo ..."
         cd tools/po2lmo
         make -j${cores:=1}
@@ -180,9 +190,11 @@ jobs:
         mkdir -p /tmp/ipk
         pushd ${dirn}/${dirn1}        
         ./scripts/feeds update -a
-        ./scripts/feeds install luci-app-passwall-plus
+        ./scripts/feeds install -a
         make package/luci-app-passwall-plus/compile -j${cores:=1}
-        find bin/ -type f -name "*luci-app-passwall-plus*" | xargs -t -i mv -vf {} /tmp/ipk
+        make package/luci-app-passwall/compile -j${cores:=1}
+        make package/luci-app-ssr-plus/compile -j${cores:=1}
+        find bin/ -type f -name "*luci-app-*" | xargs -t -i mv -vf {} /tmp/ipk
         popd
         mkdir -p ../../root/usr/bin
         mv /tmp/bin/* ../../root/usr/bin
@@ -191,7 +203,9 @@ jobs:
         sed -i "s/PKGARCH:=all/PKGARCH:=$garch/g;s/PKG_RELEASE:=1/PKG_RELEASE:=2/g" ../../Makefile
         pushd ${dirn}/${dirn1}
         make package/luci-app-passwall-plus/compile -j${cores:=1}
-        find bin/ -type f -name "*luci-app-passwall-plus*" | xargs -t -i mv -vf {} /tmp/ipk
+        make package/luci-app-passwall/compile -j${cores:=1}
+        make package/luci-app-ssr-plus/compile -j${cores:=1}
+        find bin/ -type f -name "*luci-app-*" | xargs -t -i mv -vf {} /tmp/ipk
         popd
         ls -l ../../root/usr/bin
         ls -l /tmp/ipk
@@ -200,6 +214,6 @@ jobs:
       if: success()
       uses: actions/upload-artifact@master
       with:
-        name: luci-app-passwall-plus
+        name: luci-app-passwall-ipks
         path: /tmp/ipk
         
