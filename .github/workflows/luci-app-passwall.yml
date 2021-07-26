@@ -125,10 +125,10 @@ jobs:
         echo "更新 luci-app-passwall-plus 的子模块..."
         git submodule update --init --recursive
         
-        cd feeds/luci/applications/openwrt-packages
+        cd ../openwrt-packages
         git submodule update --init --recursive
         
-        cd feeds/luci/applications/small
+        cd ../small
         git submodule update --init --recursive
         
         
