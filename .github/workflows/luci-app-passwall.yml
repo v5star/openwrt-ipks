@@ -133,7 +133,7 @@ jobs:
         
         
         echo "编译 po2lmo ..."
-        cd tools/po2lmo
+        cd ../luci-app-passwall-plus/tools/po2lmo
         make -j${cores:=1}
         sudo make install
         make clean
