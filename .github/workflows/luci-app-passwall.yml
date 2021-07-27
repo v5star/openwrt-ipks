@@ -1,12 +1,13 @@
 name: luci-app-passwall
 
-on:  
+on:
+  repository_dispatch:
   #push:
     #branches: [ master ]
   #pull_request:
     #branches: [ master ]
- watch:
-   types: started
+ #watch:
+ #  types: started
   #schedule:
     #- cron:  '0 0 28-31 * *'
 
