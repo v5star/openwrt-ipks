@@ -1,17 +1,12 @@
 name: luci-app-passwall
 
-on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-      tesxt:
-        description: '手动执行' 
+on:  
   #push:
     #branches: [ master ]
   #pull_request:
     #branches: [ master ]
- # watch:
-  #  types: started
+ watch:
+   types: [started]
   #schedule:
     #- cron:  '0 0 28-31 * *'
 
